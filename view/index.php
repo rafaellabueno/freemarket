@@ -118,6 +118,7 @@
                   <?php foreach($_SESSION['produto'] as $p){ ?>
                   <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
                   <?php } ?>
+                  <a class="dropdown-item" href="./carrinho.php">Finalizar Venda</a>
                 </div>
                 <?php } ?>
               </li>

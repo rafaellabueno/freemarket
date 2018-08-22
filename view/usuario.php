@@ -2,7 +2,8 @@
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
     $id = $_SESSION['id'];
-    $comando = $conexao->prepare("SELECT nome, email, descricao FROM usuario WHERE id = $id");
+    $comando = $conexao->prepare("SELECT nome, email, descricao FROM usuario WHERE id = ?");
+    $comando->bindparam(1, $id);
     $comando->execute();
     $linha = $comando->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -111,6 +112,7 @@
                   <?php foreach($_SESSION['produto'] as $p){ ?>
                   <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
                   <?php } ?>
+                  <a class="dropdown-item" href="./carrinho.php">Finalizar Venda</a>
                 </div>
                 <?php } ?>
               </li>

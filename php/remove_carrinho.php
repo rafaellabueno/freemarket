@@ -1,7 +1,8 @@
 <?php
 	require_once("../conexao/conexao.php");
 	$id = $_GET['id'];
-	$comando = $conexao->prepare("SELECT produto.produto FROM produto WHERE produto.id = $id");
+	$comando = $conexao->prepare("SELECT produto.produto FROM produto WHERE produto.id = ?");
+	$comando->bindParam(1, $id);
     $comando->execute();
     $produto = $comando->fetch(PDO::FETCH_ASSOC);
 
@@ -17,6 +18,10 @@
     	unset($_SESSION['carrinho'][$key]);
 	}
 
+	if (empty($_SESSION['produto'])) {
+		unset($_SESSION['produto']); 
+		unset($_SESSION['carrinho']); 
+	}
 
 	header('Location: ../view/produto.php?id='.$_GET['id']);
 ?>

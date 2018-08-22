@@ -1,6 +1,30 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
+    $id = $_SESSION['id'];
+     $comando = $conexao->prepare("SELECT compra.total, compra.data, compra.id FROM compra WHERE compra.usuario_id = ?");
+     $comando->bindparam(1, $id);
+     $comando->execute();
+
+     $comando2 = $conexao->prepare("SELECT produto.produto, compra_produto.compra_id, produto.id FROM produto INNER JOIN compra_produto ON produto.id = compra_produto.produto_id");
+     $comando2->execute();
+
+     $contC = $comando->rowCount();
+     $contP = $comando2->rowCount();
+
+     if($contC == 1){
+      $compras = $comando->fetch(PDO::FETCH_ASSOC);
+      }
+      else{
+        $compras = $comando->fetchAll(PDO::FETCH_ASSOC);
+      }
+
+      if($contP == 1){
+      $produtos = $comando2->fetch(PDO::FETCH_ASSOC);
+      }
+      else{
+        $produtos = $comando2->fetchAll(PDO::FETCH_ASSOC);
+      }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,9 +97,6 @@
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Table List</a>
-          </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="navbar-toggler-icon icon-bar"></span>
@@ -110,6 +131,7 @@
                   <?php foreach($_SESSION['produto'] as $p){ ?>
                   <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
                   <?php } ?>
+                  <a class="dropdown-item" href="./carrinho.php">Finalizar Venda</a>
                 </div>
                 <?php } ?>
               </li>
@@ -132,132 +154,78 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Simple Table</h4>
-                  <p class="card-category"> Here is a subtitle for this table</p>
+                  <h4 class="card-title ">Meu histórico de compras</h4>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
                       <thead class=" text-primary">
                         <th>
-                          ID
+                          #
                         </th>
                         <th>
-                          Name
+                          Data
                         </th>
                         <th>
-                          Country
+                          Produtos
                         </th>
                         <th>
-                          City
-                        </th>
-                        <th>
-                          Salary
+                          Valor da Compra
                         </th>
                       </thead>
                       <tbody>
+                      <?php if($contP != 1){
+                      foreach ($compras as $i => $compra) { ?>
+                        <tr>
+                          <td>
+                            <?php echo $i + 1; ?>
+                          </td>
+                          <td>
+                            <?php echo (new DateTime($compra['data']))->format('d-m-Y H:i:s'); ?>
+                          </td>
+                          <td>
+                           <?php 
+                              if($contP != 1){
+                              foreach ($produtos as $key => $produto) { 
+                                if ($produto['compra_id'] == $compra['id']) {
+                            ?>
+                            <?php echo $produto['produto']; echo ','; ?>
+                           <?php } } } else { 
+                                echo $produtos['produto'];
+                                echo ',';
+                              }
+                            ?>
+                          </td>
+                          <td>
+                            <?php echo $compra['total']; ?>
+                          </td>
+                        </tr>
+                        <?php } } else {?>
                         <tr>
                           <td>
                             1
                           </td>
                           <td>
-                            Dakota Rice
+                            <?php echo (new DateTime($compras['data']))->format('d-m-Y H:i:s'); ?>
                           </td>
                           <td>
-                            Niger
+                           <?php 
+                              if($contP != 1){
+                              foreach ($produtos as $key => $produto) { 
+                                if ($produto['compra_id'] == $compras['id']) {
+                            ?>
+                            <?php echo $produto['produto']; echo ','; ?>
+                           <?php } } } else { 
+                                echo $produtos['produto'];
+                                echo ',';
+                              }
+                            ?>
                           </td>
                           <td>
-                            Oud-Turnhout
-                          </td>
-                          <td class="text-primary">
-                            $36,738
+                            <?php echo $compras['total']; ?>
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            2
-                          </td>
-                          <td>
-                            Minerva Hooper
-                          </td>
-                          <td>
-                            Curaçao
-                          </td>
-                          <td>
-                            Sinaai-Waas
-                          </td>
-                          <td class="text-primary">
-                            $23,789
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            3
-                          </td>
-                          <td>
-                            Sage Rodriguez
-                          </td>
-                          <td>
-                            Netherlands
-                          </td>
-                          <td>
-                            Baileux
-                          </td>
-                          <td class="text-primary">
-                            $56,142
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            4
-                          </td>
-                          <td>
-                            Philip Chaney
-                          </td>
-                          <td>
-                            Korea, South
-                          </td>
-                          <td>
-                            Overland Park
-                          </td>
-                          <td class="text-primary">
-                            $38,735
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            5
-                          </td>
-                          <td>
-                            Doris Greene
-                          </td>
-                          <td>
-                            Malawi
-                          </td>
-                          <td>
-                            Feldkirchen in Kärnten
-                          </td>
-                          <td class="text-primary">
-                            $63,542
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            6
-                          </td>
-                          <td>
-                            Mason Porter
-                          </td>
-                          <td>
-                            Chile
-                          </td>
-                          <td>
-                            Gloucester
-                          </td>
-                          <td class="text-primary">
-                            $78,615
-                          </td>
-                        </tr>
+                        <?php } ?>
                       </tbody>
                     </table>
                   </div>

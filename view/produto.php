@@ -1,10 +1,12 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
+    if(isset($_GET['id'])){
      $id = $_GET['id'];
-     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = $id");
-    $comando->execute();
-    $produto = $comando->fetch(PDO::FETCH_ASSOC);
+     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = ?");
+     $comando->bindparam(1, $id);
+     $comando->execute();
+     $produto = $comando->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,6 +113,7 @@
                   <?php foreach($_SESSION['produto'] as $p){ ?>
                   <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
                   <?php } ?>
+                  <a class="dropdown-item" href="./carrinho.php">Finalizar Venda</a>
                 </div>
                 <?php } ?>
               </li>
@@ -196,8 +199,11 @@
 
 </html>
 <?php
-   }
-   else{
+  } else{
+    header('Location: ./index.php');
+  }
+}
+  else{
   header('Location: ./login.php');
 }
 ?>

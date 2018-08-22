@@ -1,9 +1,7 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
-    $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE categoria.categoria = 'TV'");
-    $comando->execute();
-    $produtos = $comando->fetchAll(PDO::FETCH_ASSOC);
+    if(isset($_SESSION['carrinho'])){
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,11 +27,6 @@
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag
-    -->
       <div class="logo">
         <a href="./index.php" class="simple-text logo-normal">
           Mercado Dibre
@@ -41,7 +34,7 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item  ">
+          <li class="nav-item">
             <a class="nav-link" href="./usuario.php">
               <i class="material-icons">person</i>
               <p>Meu Perfil</p>
@@ -53,8 +46,8 @@
               <p>Produtos</p>
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
-                        <li class="nav-item active ">
-                            <a class="nav-link " href="./tv.php">
+                        <li>
+                            <a class="nav-link" href="./tv.php">
                                 <i class="material-icons">desktop_windows</i>
                                 <p href="">TV</p>
                             </a>
@@ -68,7 +61,7 @@
               </ul>
 
           </li>
-          <li class="nav-item ">
+          <li>
             <a class="nav-link" href="./historico.php">
               <i class="material-icons">content_paste</i>
               <p>Histórico de Compras</p>
@@ -81,9 +74,6 @@
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Temos o produto perfeito para você</a>
-          </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="navbar-toggler-icon icon-bar"></span>
@@ -138,29 +128,74 @@
       <div class="content">
         <div class="container-fluid">
           <div class="row">
-
-            <?php foreach ($produtos as $i => $produto) { 
-            ?>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
-                  <div class="card-icon">
-                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
-                  </div>
-                  <p class="card-category"><?php echo $produto['produto']; ?></p>
-                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
-                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
-                          <i class="material-icons">remove_red_eye</i>
-                  </a>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Finalizar Venda</h4>
+                  <p class="card-category"> Ao finalizar a venda, você receberá o recibo da sua compra por e-mail.</p>
                 </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          #
+                        </th>
+                        <th>
+                          Produto
+                        </th>
+                        <th>
+                          Valor
+                        </th>
+                        <th>
+                          Total
+                        </th>
+                      </thead>
+                      <tbody>
+                      <?php $valor = 0; ?>
+                      <?php foreach($_SESSION['produto'] as $key => $p){ ?>
+                        <tr>
+                          <td>
+                            <?php echo $key + 1 ?>
+                          </td>
+                          <td>
+                            <?php echo $p['produto'] ?>
+                          </td>
+                          <td>
+                           <?php echo $p['valor'] ?>
+                           <?php $valor = $valor + $p['valor']; ?>
+                          </td>
+                          <td>
+                            
+                          </td>
+                        </tr>
+                        </tr>
+                      <?php } ?>
+                        <tr>
+                          <td>
+                            
+                          </td>
+                          <td>
+                            
+                          </td>
+                          <td>
+                            
+                          </td>
+                          <td>
+                            <?php echo $valor ?>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                    <a href="../php/finalizar_venda.php?total=<?=$valor;?>" class="btn btn-primary btn-round">
+                      <i class="material-icons">add_shopping_cart</i> Finalizar Venda
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
-            <?php } ?>
           </div>
         </div>
       </div>
@@ -181,16 +216,13 @@
   <script src="../assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
-  <script>
-    $(document).ready(function() {
-      //init DateTimePickers
-      md.initFormExtendedDatetimepickers();
-    });
-  </script>
 </body>
 
 </html>
 <?php
+  } else{
+    header('Location: ./index.php');
+  }
    }
    else{
   header('Location: ./login.php');

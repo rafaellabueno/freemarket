@@ -1,9 +1,10 @@
 <?php
 	require_once("../conexao/conexao.php");
-	$email = $_POST['email'];
+	$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 	$senha = $_POST['senha'];
 
- 	$comando = $conexao->prepare("SELECT * FROM usuario WHERE email = '$email'");
+ 	$comando = $conexao->prepare("SELECT * FROM usuario WHERE email = ?");
+ 	$comando->bindParam(1, $email);
  	$comando->execute();
  	$usuario = $comando->rowCount();
  	$user = $comando->fetch(PDO::FETCH_ASSOC);
