@@ -1,7 +1,6 @@
 <?php
 	session_start(); 
-	$conexao = mysqli_connect('localhost', 'root','','mercadodibre'); 
-	$salvar = mysqli_set_charset($conexao,"UTF8");
+	$conexao = new PDO('mysql:host=localhost;dbname=mercadodibre', 'root', '');
 
 	if(!$conexao){
 		echo "Falha na conexão";

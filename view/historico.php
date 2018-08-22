@@ -46,13 +46,13 @@
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="cadastrar_produto">
+                            <a class="nav-link" href="./tv.php">
                                 <i class="material-icons">desktop_windows</i>
                                 <p href="">TV</p>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="./celular.php">
                                 <i class="material-icons">stay_primary_portrait</i>
                                 <p>Celular</p>
                             </a>
@@ -96,18 +96,22 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">add_shopping_cart</i>
-                  <span class="notification">5</span>
+                   <?php if(isset($_SESSION['carrinho'])){ ?>
+                  <span class="notification"><?php echo count($_SESSION['carrinho']); ?></span>
+                  <?php } else{ ?>
+                  <span class="notification">0</span>
+                  <?php } ?>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>
                 </a>
+                 <?php if(isset($_SESSION['produto'])){ ?>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  <?php foreach($_SESSION['produto'] as $p){ ?>
+                  <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
+                  <?php } ?>
                 </div>
+                <?php } ?>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href = "../php/session.php">

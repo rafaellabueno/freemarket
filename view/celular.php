@@ -1,10 +1,9 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
-     $id = $_GET['id'];
-     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = $id");
+    $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE categoria.categoria = 'Celular'");
     $comando->execute();
-    $produto = $comando->fetch(PDO::FETCH_ASSOC);
+    $produtos = $comando->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +29,11 @@
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
       <div class="logo">
         <a href="./index.php" class="simple-text logo-normal">
           Mercado Dibre
@@ -50,12 +54,12 @@
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="./tv.php">
+                            <a class="nav-link " href="./tv.php">
                                 <i class="material-icons">desktop_windows</i>
                                 <p href="">TV</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item active">
                             <a class="nav-link" href="./celular.php">
                                 <i class="material-icons">stay_primary_portrait</i>
                                 <p>Celular</p>
@@ -77,6 +81,9 @@
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand" href="#pablo">Temos o produto perfeito para você</a>
+          </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="navbar-toggler-icon icon-bar"></span>
@@ -128,44 +135,32 @@
       </nav>
       <!-- End Navbar -->
       <div class="content">
-          <div class="container-fluid">
-          <div class="card">
-            <div class="card-header card-header-primary">
-              <h3 class="card-title"><?php echo $produto['produto']; ?></h3>
-              <p class="card-category">
-                <?php echo $produto['descricao']; ?>
-              </p>
-            </div>
-            <div class="card-body">
-              <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="card-icon">
-                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 500px;" src="<?php echo $produto['caminho']; ?>" />
+        <div class="container-fluid">
+          <div class="row">
+
+            <?php foreach ($produtos as $i => $produto) { 
+            ?>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
+                  </div>
+                  <p class="card-category"><?php echo $produto['produto']; ?></p>
+                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
+                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
+                          <i class="material-icons">remove_red_eye</i>
+                  </a>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
+                  </div>
                 </div>
               </div>
+            </div> 
+            <?php } ?>
 
-              <?php if(isset($_SESSION['carrinho'])) { ?>
-              <?php if(! in_array($produto['id'], $_SESSION['carrinho'])) { ?>
-              <div class="col-lg-3 col-md-3 col-sm-6">
-                <a href="../php/carrinho.php?id=<?=$produto['id'];?>" class="btn btn-success btn-round">
-                  <i class="material-icons">add_shopping_cart</i> Adicionar ao Carrinho
-                </a>
-              </div>
-
-              <?php } else{ ?>
-              <div class="col-lg-3 col-md-3 col-sm-6">
-                <a href="../php/remove_carrinho.php?id=<?=$produto['id'];?>" class="btn btn-danger btn-round">
-                  <i class="material-icons">add_shopping_cart</i> Remover do Carrinho
-                </a>
-              </div>
-              <?php }?>
-              <?php } else{ ?>
-              <div class="col-lg-3 col-md-3 col-sm-6">
-                <a href="../php/carrinho.php?id=<?=$produto['id'];?>" class="btn btn-success btn-round">
-                  <i class="material-icons">add_shopping_cart</i> Adicionar ao Carrinho
-                </a>
-              </div>
-              <?php }?>
-            
           </div>
         </div>
       </div>

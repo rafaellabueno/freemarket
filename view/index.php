@@ -1,6 +1,9 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
+    $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id");
+    $comando->execute();
+    $produtos = $comando->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,13 +54,13 @@
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="cadastrar_produto">
+                            <a class="nav-link" href="./tv.php">
                                 <i class="material-icons">desktop_windows</i>
                                 <p href="">TV</p>
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="./celular.php">
                                 <i class="material-icons">stay_primary_portrait</i>
                                 <p>Celular</p>
                             </a>
@@ -101,18 +104,22 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">add_shopping_cart</i>
-                  <span class="notification">5</span>
+                   <?php if(isset($_SESSION['carrinho'])){ ?>
+                  <span class="notification"><?php echo count($_SESSION['carrinho']); ?></span>
+                  <?php } else{ ?>
+                  <span class="notification">0</span>
+                  <?php } ?>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>
                 </a>
+                 <?php if(isset($_SESSION['produto'])){ ?>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  <?php foreach($_SESSION['produto'] as $p){ ?>
+                  <a class="dropdown-item" href="./produto.php?id=<?=$p['id'];?>"><?php echo $p['produto'] ?></a>
+                  <?php } ?>
                 </div>
+                <?php } ?>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href = "../php/session.php">
@@ -130,44 +137,54 @@
       <div class="content">
         <div class="container-fluid">
           <div class="row">
+
+            <?php foreach ($produtos as $i => $produto) { 
+                if($produto['categoria'] == 'TV'){
+            ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
-                    <img id="profile-img" class="profile-img-card" style="width: 100px;" src="../assets/img/tv.jpg" />
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
                   </div>
-                  <p class="card-category">Plasma</p>
-                  <h3 class="card-title">R$ 2,00</h3>
-                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php">
+                  <p class="card-category"><?php echo $produto['produto']; ?></p>
+                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
+                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
                           <i class="material-icons">remove_red_eye</i>
                   </a>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">local_offer</i> TV
+                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
                   </div>
                 </div>
               </div>
             </div>
+            <?php } ?>
+            <?php if($produto['categoria'] == 'Celular'){
+            ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <img id="profile-img" class="profile-img-card" style="width: 100px;" src="../assets/img/iphone.jpg" />
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
                   </div>
-                  <p class="card-category">Iphone</p>
-                  <h3 class="card-title">R$ 3,00</h3>
-                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php">
+                  <p class="card-category"><?php echo $produto['produto']; ?></p>
+                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
+                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
                           <i class="material-icons">remove_red_eye</i>
                   </a>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">local_offer</i> Celular
+                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
                   </div>
                 </div>
               </div>
-            </div>                
+            </div> 
+            <?php } ?> 
+            <?php } ?>
+
           </div>
         </div>
       </div>

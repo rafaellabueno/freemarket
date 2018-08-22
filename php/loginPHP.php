@@ -3,15 +3,12 @@
 	$email = $_POST['email'];
 	$senha = $_POST['senha'];
 
-	$sql = "SELECT email, senha FROM usuario WHERE email = '$email'";
-	$salvar = mysqli_query($conexao,$sql);
-	$usuario = mysqli_affected_rows($conexao);
-	$linha = mysqli_fetch_assoc($salvar);
+ 	$comando = $conexao->prepare("SELECT * FROM usuario WHERE email = '$email'");
+ 	$comando->execute();
+ 	$usuario = $comando->rowCount();
+ 	$user = $comando->fetch(PDO::FETCH_ASSOC);
 
-	$sql2 = "SELECT * FROM usuario WHERE email = '$email'";
- 	$result = mysqli_query($conexao, $sql2) or die(mysqli_error());
- 	$user = mysqli_fetch_assoc($result);
-	if($usuario == 1 and password_verify($senha, $linha['senha'])) {
+	if($usuario == 1 and password_verify($senha, $user['senha'])) {
 	    $_SESSION['id'] = $user['id'];
 	    header("Location: ../view/index.php");
 	} else {

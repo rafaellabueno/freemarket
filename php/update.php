@@ -3,15 +3,15 @@ require_once("../conexao/conexao.php");
 
 $nome=$_POST['nome'];
 $email=$_POST['email'];
-$e = $_SESSION['oi'];
- $sql = "SELECT * FROM usuario WHERE email = '$e'";
- $result = mysqli_query($conexao, $sql) or die(mysqli_error());
- $linhas = mysqli_num_rows($result); 
- $linha = mysqli_fetch_assoc($result); 
+$id = $_SESSION['id'];
+ $comando = $conexao->prepare("SELECT * FROM usuario WHERE id = $id");
+ $comando->execute();
+ $linhas = $comando->rowCount();
+ $linha = $comando->fetch(PDO::FETCH_ASSOC); 
  if ($linhas) {
  	$id = $linha['id'];
- 	$sql = "UPDATE usuario SET nome='$nome',email='$email' WHERE id='$id'";
- 	$result = mysqli_query($conexao, $sql);
+ 	$comando = $conexao->prepare("UPDATE usuario SET nome='$nome',email='$email' WHERE id='$id'");
+ 	$comando->execute();
  	
 
    header("Location: ../view/usuario.php");
