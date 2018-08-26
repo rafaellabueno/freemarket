@@ -1,6 +1,5 @@
 <?php
    require_once("../conexao/conexao.php");
-   if(isset($_SESSION['id'])){
     if(isset($_GET['id'])){
      $id = $_GET['id'];
      $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = ?");
@@ -39,12 +38,14 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
+          <?php if(isset($_SESSION['id'])){ ?>
           <li class="nav-item  ">
             <a class="nav-link" href="./usuario.php">
               <i class="material-icons">person</i>
               <p>Meu Perfil</p>
             </a>
           </li>
+          <?php } ?>
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
@@ -66,12 +67,14 @@
               </ul>
 
           </li>
+          <?php if(isset($_SESSION['id'])){ ?>
           <li class="nav-item ">
             <a class="nav-link" href="./historico.php">
               <i class="material-icons">content_paste</i>
               <p>Histórico de Compras</p>
             </a>
           </li>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -86,15 +89,6 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <button type="submit" class="btn btn-white btn-round btn-just-icon">
-                  <i class="material-icons">search</i>
-                  <div class="ripple-container"></div>
-                </button>
-              </div>
-            </form>
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -117,6 +111,7 @@
                 </div>
                 <?php } ?>
               </li>
+              <?php if(isset($_SESSION['id'])){ ?>
               <li class="nav-item">
                 <a class="nav-link" href = "../php/session.php">
                   <i class="material-icons">exit_to_app</i>
@@ -125,6 +120,17 @@
                   </p>
                 </a>
               </li>
+              <?php } else{ ?>
+              <?php $url = '../view/produto.php?id='.$id ?>
+              <li class="nav-item">
+                <a class="nav-link" href = "./login.php?url=<?=$url?>">
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+              </li>
+              <?php } ?>
             </ul>
           </div>
         </div>
@@ -202,8 +208,4 @@
   } else{
     header('Location: ./index.php');
   }
-}
-  else{
-  header('Location: ./login.php');
-}
 ?>

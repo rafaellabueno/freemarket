@@ -122,7 +122,12 @@ body {
 
             <img id="profile-img" class="profile-img-card" src="../assets/img/logo.png" />
             <p id="profile-name" class="profile-name-card"></p>
+            <?php if(isset($_GET['url'])) { ?>
+            <?php $id = $_GET['url'] ?>
+            <form class="form-signin" action="../php/salvar.php?url=<?=$id?>" method="post">
+            <?php }else{ ?>
             <form class="form-signin" action="../php/salvar.php" method="post">
+            <?php } ?>
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome" required autofocus>
                 <input type="email" id="email" name="email" class="form-control" placeholder="Email" required autofocus>

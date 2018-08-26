@@ -11,7 +11,12 @@
 
 	if($usuario == 1 and password_verify($senha, $user['senha'])) {
 	    $_SESSION['id'] = $user['id'];
-	    header("Location: ../view/index.php");
+	    if(isset($_GET['url'])) {
+	    	header("Location: ".$_GET['url']);
+	     }
+	    else{
+	    	header("Location: ../view/index.php");
+		}
 	} else {
 	     header("Location: ../view/login.php?erro=Os dados informados não batem com as nossas credenciais");
 	}

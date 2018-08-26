@@ -24,7 +24,11 @@ else {
  $user = $comando->fetch(PDO::FETCH_ASSOC);
  $_SESSION['id'] = $user['id'];
  
-  header('Location: ../view/index.php');
+  if(isset($_GET['url'])) {
+  	header("Location: ".$_GET['url']);
+  } else{
+  	header('Location: ../view/index.php');
+  }
 }
 ?>
 

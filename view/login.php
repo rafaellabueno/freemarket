@@ -119,14 +119,23 @@ body {
             </div>
             <?php } ?>
             <img id="profile-img" class="profile-img-card" src="../assets/img/logo.png" /> 
+            <?php if(isset($_GET['url'])) { ?>
+            <?php $id = $_GET['url'] ?>
+            <form class="form-signin" action="../php/loginPHP.php?url=<?=$id?>" method="post">
+            <?php }else{ ?>
             <form class="form-signin" action="../php/loginPHP.php" method="post">
+            <?php } ?>
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text" id="email" name="email" class="form-control" placeholder="E-mail" required autofocus>
                 <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha" required>
                 <button class="btn btn-primary btn-block btn-signin" type="submit">Logar</button>
             </form>
+            <?php if(isset($_GET['url'])) { ?>
+            <?php $id = $_GET['url'] ?>
+            <a href="registrar.php?url=<?=$id?>" style="text-decoration: none;"><center>Registre-se</center></a>
+            <?php }else{ ?>
             <a href="registrar.php" style="text-decoration: none;"><center>Registre-se</center></a>
- 
+            <?php } ?>
         </div>
     </div>
 
