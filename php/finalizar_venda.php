@@ -1,7 +1,11 @@
 <?php
+        use PHPMailer\PHPMailer\PHPMailer;
+        use PHPMailer\PHPMailer\Exception;
 	require_once("../conexao/conexao.php");
-	//ini_set("SMTP", "smtp.gmail.com");
-	//ini_set("smtp_port", "465");
+        require 'vendor/autoload.php';
+
+        $mail = new PHPMailer(true);
+
 	ini_set("sendmail_from", "rafaellasbueno@gmail.com");
 
 	$id = $_SESSION['id'];
@@ -32,6 +36,25 @@
     $comando->execute();
     $linha = $comando->fetch(PDO::FETCH_ASSOC);
 	mail('rafaellasbueno@gmail.com', 'MercadoDibre', 'Sua compra foi finalizada com sucesso');
+        $mail->SMTPDebug = 2;                                
+        $mail->isSMTP();                                   
+        $mail->Host = 'localhost';  
+        $mail->SMTPAuth = true;                              
+        $mail->Username = 'credit2eat@gmail.com';          
+        $mail->Password = 'teixeira123';                        
+        $mail->SMTPSecure = 'tls';                           
+        $mail->Port = 587;                   
+
+        
+        $mail->setFrom('credit2eat@gmail.com', 'Mailer');    
+        $mail->addAddress('rafaellasbueno@gmail.com');          
+
+        $mail->isHTML(true);                              
+        $mail->Subject = 'MercadoDibre';
+        $mail->Body    = '<b>Sua compra foi realizada com sucesso!</b>';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+    $mail->send();
 
 	unset($_SESSION['produto']); 
 	unset($_SESSION['carrinho']); 
