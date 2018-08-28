@@ -1,7 +1,7 @@
 <?php
 	require_once("../conexao/conexao.php");
-	ini_set("SMTP", "smtp.gmail.com");
-	ini_set("smtp_port", "465");
+	//ini_set("SMTP", "smtp.gmail.com");
+	//ini_set("smtp_port", "465");
 	ini_set("sendmail_from", "rafaellasbueno@gmail.com");
 
 	$id = $_SESSION['id'];
@@ -31,10 +31,10 @@
     $comando->bindparam(1, $id);
     $comando->execute();
     $linha = $comando->fetch(PDO::FETCH_ASSOC);
-	//mail($linha['email'], 'MercadoDibre', 'Sua compra foi finalizada com sucesso');
+	mail('rafaellasbueno@gmail.com', 'MercadoDibre', 'Sua compra foi finalizada com sucesso');
 
 	unset($_SESSION['produto']); 
 	unset($_SESSION['carrinho']); 
 
-	header('Location: ../view/historico.php');
+	//header('Location: ../view/historico.php');
 ?>

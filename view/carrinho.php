@@ -141,6 +141,9 @@
                         <th>
                           Total
                         </th>
+                        <th>
+                          
+                        </th>
                       </thead>
                       <tbody>
                       <?php $valor = 0; ?>
@@ -159,7 +162,11 @@
                           <td>
                             
                           </td>
-                        </tr>
+                          <td>
+                            <a href="../php/remove_finaliza_venda.php?id=<?=$p['id'];?>" class="btn btn-primary btn-round">
+                              <i class="material-icons">delete_forever</i>
+                            </a>
+                          </td>
                         </tr>
                       <?php } ?>
                         <tr>
