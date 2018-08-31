@@ -2,7 +2,7 @@
    require_once("../conexao/conexao.php");
     if(isset($_GET['id'])){
      $id = $_GET['id'];
-     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = ?");
+     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, produto.qtd, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE produto.id = ?");
      $comando->bindparam(1, $id);
      $comando->execute();
      $produto = $comando->fetch(PDO::FETCH_ASSOC);
@@ -49,19 +49,31 @@
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
-              <p>Produtos</p>
+              <p>Times</p>
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="./tv.php">
-                                <i class="material-icons">desktop_windows</i>
-                                <p href="">TV</p>
+                            <a class="nav-link" href="./flamengo.php">
+                                <img id="profile-img" title="Flamengo" style="width: 25px;" src="../assets/img/Flamengo.png" />
+                                  Flamengo
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./fluminense.php">
+                                <img id="profile-img" title="Fluminense" style="width: 25px;" src="../assets/img/Fluminense.png" />
+                                Fluminense
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./gremio.php">
+                                <img id="profile-img" title="Gremio" style="width: 25px;" src="../assets/img/Gremio.png" />
+                                Grêmio
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="./celular.php">
-                                <i class="material-icons">stay_primary_portrait</i>
-                                <p>Celular</p>
+                            <a class="nav-link" href="./juventus.php">
+                                <img id="profile-img" title="Juventus" style="width: 20px;" src="../assets/img/Juventus.png" />
+                                Juventus
                             </a>
                         </li> 
               </ul>
@@ -153,27 +165,48 @@
               </div>
 
               <?php if(isset($_SESSION['carrinho'])) { ?>
-              <?php if(! in_array($produto['id'], $_SESSION['carrinho'])) { ?>
+              <?php if(in_array($produto['id'], $_SESSION['carrinho'])) { ?>
+              <?php $contagem = array_count_values($_SESSION['carrinho']); if($produto['qtd'] <= $contagem[$produto['id']]) { ?>
+              <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="" class="btn btn-danger ">
+                  <i class="material-icons">add_shopping_cart</i> Produto Indisponível
+                </a>
+              </div>
+               <?php } else{ ?>
               <div class="col-lg-3 col-md-3 col-sm-6">
                 <a href="../php/carrinho.php?id=<?=$produto['id'];?>" class="btn btn-success btn-round">
                   <i class="material-icons">add_shopping_cart</i> Adicionar ao Carrinho
                 </a>
               </div>
 
-              <?php } else{ ?>
-              <div class="col-lg-3 col-md-3 col-sm-6">
-                <a href="../php/remove_carrinho.php?id=<?=$produto['id'];?>" class="btn btn-danger btn-round">
-                  <i class="material-icons">add_shopping_cart</i> Remover do Carrinho
-                </a>
-              </div>
-              <?php }?>
-              <?php } else{ ?>
+              <?php } ?>
+              <?php } else{?>
+              <?php if($produto['qtd'] > 0) { ?>
               <div class="col-lg-3 col-md-3 col-sm-6">
                 <a href="../php/carrinho.php?id=<?=$produto['id'];?>" class="btn btn-success btn-round">
                   <i class="material-icons">add_shopping_cart</i> Adicionar ao Carrinho
                 </a>
               </div>
-              <?php }?>
+              <?php } else{ ?>
+              <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="" class="btn btn-danger">
+                  <i class="material-icons">add_shopping_cart</i> Produto Indisponível
+                </a>
+              </div>
+              <?php } } } else{ ?>
+              <?php if($produto['qtd'] > 0) { ?>
+              <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="../php/carrinho.php?id=<?=$produto['id'];?>" class="btn btn-success btn-round">
+                  <i class="material-icons">add_shopping_cart</i> Adicionar ao Carrinho
+                </a>
+              </div>
+              <?php } else{ ?>
+              <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="" class="btn btn-danger">
+                  <i class="material-icons">add_shopping_cart</i> Produto Indisponível
+                </a>
+              </div>
+              <?php } } ?>
             
           </div>
         </div>

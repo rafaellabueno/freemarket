@@ -51,19 +51,31 @@
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
-              <p>Produtos</p>
+              <p>Times</p>
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="./tv.php">
-                                <i class="material-icons">desktop_windows</i>
-                                <p href="">TV</p>
+                            <a class="nav-link" href="./flamengo.php">
+                                <img id="profile-img" title="Flamengo" style="width: 25px;" src="../assets/img/Flamengo.png" />
+                                  Flamengo
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./fluminense.php">
+                                <img id="profile-img" title="Fluminense" style="width: 25px;" src="../assets/img/Fluminense.png" />
+                                Fluminense
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./gremio.php">
+                                <img id="profile-img" title="Gremio" style="width: 25px;" src="../assets/img/Gremio.png" />
+                                Grêmio
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="./celular.php">
-                                <i class="material-icons">stay_primary_portrait</i>
-                                <p>Celular</p>
+                            <a class="nav-link" href="./juventus.php">
+                                <img id="profile-img" title="Juventus" style="width: 20px;" src="../assets/img/Juventus.png" />
+                                Juventus
                             </a>
                         </li> 
               </ul>
@@ -146,13 +158,13 @@
           <div class="row">
 
             <?php foreach ($produtos as $i => $produto) { 
-                if($produto['categoria'] == 'TV'){
+                if($produto['categoria'] == 'Juventus'){
             ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
+                <div class="card-header card-header-black card-header-icon">
                   <div class="card-icon">
-                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 200px;" src="<?php echo $produto['caminho']; ?>" />
                   </div>
                   <p class="card-category"><?php echo $produto['produto']; ?></p>
                   <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
@@ -168,13 +180,57 @@
               </div>
             </div>
             <?php } ?>
-            <?php if($produto['categoria'] == 'Celular'){
+            <?php if($produto['categoria'] == 'Gremio'){
             ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 200px;" src="<?php echo $produto['caminho']; ?>" />
+                  </div>
+                  <p class="card-category"><?php echo $produto['produto']; ?></p>
+                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
+                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
+                          <i class="material-icons">remove_red_eye</i>
+                  </a>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <?php } ?> 
+            <?php if($produto['categoria'] == 'Flamengo'){
+            ?>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 200px;" src="<?php echo $produto['caminho']; ?>" />
+                  </div>
+                  <p class="card-category"><?php echo $produto['produto']; ?></p>
+                  <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>
+                  <a rel="tooltip" title="Ver Produto" class="btn btn-primary btn-link btn-sm" href="./produto.php?id=<?=$produto['id'];?>">
+                          <i class="material-icons">remove_red_eye</i>
+                  </a>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">local_offer</i> <?php echo $produto['categoria']; ?>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <?php } ?> 
+            <?php if($produto['categoria'] == 'Fluminense'){
+            ?>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 200px;" src="<?php echo $produto['caminho']; ?>" />
                   </div>
                   <p class="card-category"><?php echo $produto['produto']; ?></p>
                   <h3 class="card-title">R$ <?php echo $produto['valor']; ?></h3>

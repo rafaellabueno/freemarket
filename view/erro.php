@@ -1,7 +1,8 @@
 <?php
    require_once("../conexao/conexao.php");
    if(isset($_SESSION['id'])){
-    if(isset($_SESSION['carrinho'])){
+    if (isset($_SESSION['erro'])) {
+     
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +28,11 @@
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
       <div class="logo">
         <a href="./index.php" class="simple-text logo-normal">
           Mercado Dibre
@@ -34,12 +40,14 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item">
+          <?php if(isset($_SESSION['id'])){ ?>
+          <li class="nav-item  ">
             <a class="nav-link" href="./usuario.php">
               <i class="material-icons">person</i>
               <p>Meu Perfil</p>
             </a>
           </li>
+          <?php } ?>
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
@@ -73,12 +81,14 @@
               </ul>
 
           </li>
-          <li>
+          <?php if(isset($_SESSION['id'])){ ?>
+          <li class="nav-item ">
             <a class="nav-link" href="./historico.php">
               <i class="material-icons">content_paste</i>
               <p>Histórico de Compras</p>
             </a>
           </li>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -115,6 +125,7 @@
                 </div>
                 <?php } ?>
               </li>
+              <?php if(isset($_SESSION['id'])){ ?>
               <li class="nav-item">
                 <a class="nav-link" href = "../php/session.php">
                   <i class="material-icons">exit_to_app</i>
@@ -123,6 +134,17 @@
                   </p>
                 </a>
               </li>
+              <?php } else{ ?>
+              <?php $url = '../view/tv.php' ?>
+              <li class="nav-item">
+                <a class="nav-link" href = "./login.php?url=<?=$url?>">
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+              </li>
+              <?php } ?>
             </ul>
           </div>
         </div>
@@ -131,80 +153,8 @@
       <div class="content">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Finalizar Venda</h4>
-                  <p class="card-category"> Ao finalizar a venda, você receberá o recibo da sua compra por e-mail.</p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>
-                          #
-                        </th>
-                        <th>
-                          Produto
-                        </th>
-                        <th>
-                          Valor
-                        </th>
-                        <th>
-                          Total
-                        </th>
-                        <th>
-                          
-                        </th>
-                      </thead>
-                      <tbody>
-                      <?php $valor = 0; $cont = 1; ?>
-                      <?php foreach($_SESSION['produto'] as $key => $p){ ?>
-                        <tr>
-                          <td>
-                            <?php echo $cont; $cont++; ?>
-                          </td>
-                          <td>
-                            <?php echo $p['produto'] ?>
-                          </td>
-                          <td>
-                           <?php echo $p['valor'] ?>
-                           <?php $valor = $valor + $p['valor']; ?>
-                          </td>
-                          <td>
-                            
-                          </td>
-                          <td>
-                            <a href="../php/remove_finaliza_venda.php?id=<?=$p['id'];?>" class="btn btn-primary btn-round">
-                              <i class="material-icons">delete_forever</i>
-                            </a>
-                          </td>
-                        </tr>
-                      <?php } ?>
-                        <tr>
-                          <td>
-                            
-                          </td>
-                          <td>
-                            
-                          </td>
-                          <td>
-                            
-                          </td>
-                          <td>
-                            <?php echo $valor ?>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 text-right">
-                    <a href="../php/finalizar_venda.php?total=<?=$valor;?>" class="btn btn-primary btn-round">
-                      <i class="material-icons">add_shopping_cart</i> Finalizar Venda
-                    </a>
-                  </div>
-                </div>
-              </div>
+            <div class="alert alert-danger" role="alert">
+              Oops! Alguém finalizou a compra antes de você e um dos produtos não está mais disponível.
             </div>
           </div>
         </div>
@@ -226,15 +176,20 @@
   <script src="../assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      //init DateTimePickers
+      md.initFormExtendedDatetimepickers();
+    });
+  </script>
 </body>
 
 </html>
 <?php
-  } else{
+   }else{
     header('Location: ./index.php');
-  }
    }
-   else{
+   }else{
   header('Location: ./login.php');
 }
 ?>

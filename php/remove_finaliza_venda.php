@@ -12,6 +12,7 @@
 		if ($p['id'] == $id) {
 			unset($_SESSION['produto'][$k]);
 		}
+		break;
 	}
 
 	if($key!==false){

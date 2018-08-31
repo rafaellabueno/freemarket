@@ -1,6 +1,6 @@
 <?php
    require_once("../conexao/conexao.php");
-    $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE categoria.categoria = 'TV'");
+    $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao, categoria.categoria, produto.id, imagem.titulo, imagem.caminho FROM produto INNER JOIN categoria ON categoria.id = produto.categoria_id INNER JOIN imagem_produto ON imagem_produto.produto_id = produto.id INNER JOIN imagem ON imagem_produto.imagem_id = imagem.id WHERE categoria.categoria = 'Juventus'");
     $comando->execute();
     $produtos = $comando->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -51,19 +51,31 @@
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
-              <p>Produtos</p>
+              <p>Times</p>
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
-                        <li class="nav-item active ">
-                            <a class="nav-link " href="./tv.php">
-                                <i class="material-icons">desktop_windows</i>
-                                <p href="">TV</p>
+                       <li>
+                            <a class="nav-link" href="./flamengo.php">
+                                <img id="profile-img" title="Flamengo" style="width: 25px;" src="../assets/img/Flamengo.png" />
+                                  Flamengo
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./fluminense.php">
+                                <img id="profile-img" title="Fluminense" style="width: 25px;" src="../assets/img/Fluminense.png" />
+                                Fluminense
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./gremio.php">
+                                <img id="profile-img" title="Gremio" style="width: 25px;" src="../assets/img/Gremio.png" />
+                                Grêmio
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="./celular.php">
-                                <i class="material-icons">stay_primary_portrait</i>
-                                <p>Celular</p>
+                            <a class="nav-link" href="./juventus.php">
+                                <img id="profile-img" title="Juventus" style="width: 20px;" src="../assets/img/Juventus.png" />
+                                Juventus
                             </a>
                         </li> 
               </ul>
@@ -126,7 +138,7 @@
                 </a>
               </li>
               <?php } else{ ?>
-              <?php $url = '../view/tv.php' ?>
+              <?php $url = '../view/celular.php' ?>
               <li class="nav-item">
                 <a class="nav-link" href = "./login.php?url=<?=$url?>">
                   <i class="material-icons">person</i>
@@ -149,7 +161,7 @@
             ?>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
+                <div class="card-header card-header-black card-header-icon">
                   <div class="card-icon">
                     <img id="profile-img" title="<?php echo $produto['titulo']; ?>" class="profile-img-card" style="width: 100px;" src="<?php echo $produto['caminho']; ?>" />
                   </div>
@@ -165,8 +177,9 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> 
             <?php } ?>
+
           </div>
         </div>
       </div>

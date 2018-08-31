@@ -47,19 +47,31 @@
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
-              <p>Produtos</p>
+              <p>Times</p>
             </a>
             <ul class="sidenav-second-level collapse" id="collapseComponents2">
                         <li>
-                            <a class="nav-link" href="./tv.php">
-                                <i class="material-icons">desktop_windows</i>
-                                <p href="">TV</p>
+                            <a class="nav-link" href="./flamengo.php">
+                                <img id="profile-img" title="Flamengo" style="width: 25px;" src="../assets/img/Flamengo.png" />
+                                  Flamengo
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./fluminense.php">
+                                <img id="profile-img" title="Fluminense" style="width: 25px;" src="../assets/img/Fluminense.png" />
+                                Fluminense
+                            </a>
+                        </li> 
+                        <li>
+                            <a class="nav-link" href="./gremio.php">
+                                <img id="profile-img" title="Gremio" style="width: 25px;" src="../assets/img/Gremio.png" />
+                                Grêmio
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link" href="./celular.php">
-                                <i class="material-icons">stay_primary_portrait</i>
-                                <p>Celular</p>
+                            <a class="nav-link" href="./juventus.php">
+                                <img id="profile-img" title="Juventus" style="width: 20px;" src="../assets/img/Juventus.png" />
+                                Juventus
                             </a>
                         </li> 
               </ul>
