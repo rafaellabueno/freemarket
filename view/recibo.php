@@ -1,7 +1,17 @@
 <?php
    require_once("../conexao/conexao.php");
-   if(isset($_SESSION['id'])){
-    if(isset($_SESSION['carrinho'])){
+    if(isset($_SESSION['id']) && isset($_GET['compra'])){
+     $id_compra = $_GET['compra'];
+     $comando = $conexao->prepare("SELECT produto.produto, produto.valor, produto.descricao FROM produto INNER JOIN compra_produto ON produto.id = compra_produto.produto_id INNER JOIN compra ON compra_produto.compra_id = compra.id WHERE compra.id = ? ");
+     $comando->bindparam(1, $id_compra, PDO::PARAM_INT);
+     $comando->execute();
+     $contP = $comando->rowCount();
+     if($contP == 1){
+      $produtos = $comando->fetch(PDO::FETCH_ASSOC);
+      }
+      else{
+        $produtos = $comando->fetchAll(PDO::FETCH_ASSOC);
+      }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,12 +44,14 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item">
+          <?php if(isset($_SESSION['id'])){ ?>
+          <li class="nav-item  ">
             <a class="nav-link" href="./usuario.php">
               <i class="material-icons">person</i>
               <p>Meu Perfil</p>
             </a>
           </li>
+          <?php } ?>
           <li class="nav-item ">
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents2" data-parent="#exampleAccordion">
               <i class="material-icons">add</i>
@@ -73,12 +85,14 @@
               </ul>
 
           </li>
-          <li>
+          <?php if(isset($_SESSION['id'])){ ?>
+          <li class="nav-item ">
             <a class="nav-link" href="./historico.php">
               <i class="material-icons">content_paste</i>
               <p>Histórico de Compras</p>
             </a>
           </li>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -115,6 +129,7 @@
                 </div>
                 <?php } ?>
               </li>
+              <?php if(isset($_SESSION['id'])){ ?>
               <li class="nav-item">
                 <a class="nav-link" href = "../php/session.php">
                   <i class="material-icons">exit_to_app</i>
@@ -123,43 +138,39 @@
                   </p>
                 </a>
               </li>
+              <?php } else{ ?>
+              <?php $url = '../view/produto.php?id='.$id ?>
+              <li class="nav-item">
+                <a class="nav-link" href = "./login.php?url=<?=$url?>">
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+              </li>
+              <?php } ?>
             </ul>
           </div>
         </div>
       </nav>
       <!-- End Navbar -->
       <div class="content">
-        <div class="container-fluid">
+          <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
+              <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="material-icons">close</i>
+                </button>
+                Sua compra foi realizada com sucesso! Enviamos um recibo para o seu e-mail com as informações da compra.
+              </div>
               <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Finalizar Venda</h4>
-                  <p class="card-category"> Ao finalizar a venda, você receberá o recibo da sua compra por e-mail.</p>
-                </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
-                      <thead class=" text-primary">
-                        <th>
-                          #
-                        </th>
-                        <th>
-                          Produto
-                        </th>
-                        <th>
-                          Valor
-                        </th>
-                        <th>
-                          Total
-                        </th>
-                        <th>
-                          
-                        </th>
-                      </thead>
                       <tbody>
                       <?php $valor = 0; $cont = 1;?>
-                      <?php foreach($_SESSION['produto'] as $key => $p){ ?>
+                      <?php if($contP != 1){ foreach($produtos as $key => $p){ ?>
                         <tr>
                           <td>
                             <?php echo $cont; $cont++; ?>
@@ -174,13 +185,24 @@
                           <td>
                             
                           </td>
+                        </tr>
+                      <?php } } else{ ?>
+                        <tr>
                           <td>
-                            <a href="../php/remove_finaliza_venda.php?id=<?=$p['id'];?>" class="btn btn-primary btn-round">
-                              <i class="material-icons">delete_forever</i>
-                            </a>
+                            <?php echo $cont; $cont++; ?>
+                          </td>
+                          <td>
+                            <?php echo $produtos['produto'] ?>
+                          </td>
+                          <td>
+                           <?php echo $produtos['valor'] ?>
+                           <?php $valor = $valor + $produtos['valor']; ?>
+                          </td>
+                          <td>
+                            
                           </td>
                         </tr>
-                      <?php } ?>
+                        <?php } ?>
                         <tr>
                           <td>
                             
@@ -192,28 +214,20 @@
                             
                           </td>
                           <td>
-                            <?php echo $valor ?>
-                          </td>
-                          <td>
-                            
+                            <?php echo 'Total:'. $valor ?>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 text-right">
-                    <a href="../php/finalizar_venda.php?total=<?=$valor;?>" class="btn btn-primary btn-round">
-                      <i class="material-icons">add_shopping_cart</i> Finalizar Venda
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
+</div>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
   <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
@@ -229,6 +243,12 @@
   <script src="../assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      //init DateTimePickers
+      md.initFormExtendedDatetimepickers();
+    });
+  </script>
 </body>
 
 </html>
@@ -236,8 +256,4 @@
   } else{
     header('Location: ./index.php');
   }
-   }
-   else{
-  header('Location: ./login.php');
-}
 ?>

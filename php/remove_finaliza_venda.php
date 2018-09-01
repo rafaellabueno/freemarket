@@ -6,18 +6,15 @@
     $comando->execute();
     $produto = $comando->fetch(PDO::FETCH_ASSOC);
 
-	$key = array_search($_GET['id'], $_SESSION['carrinho']);
-
 	foreach ($_SESSION['produto'] as $k => $p) {
 		if ($p['id'] == $id) {
+			$key = array_search($p['id'], $_SESSION['carrinho']);
 			unset($_SESSION['produto'][$k]);
+			unset($_SESSION['carrinho'][$key]);
+			break;
 		}
-		break;
 	}
 
-	if($key!==false){
-    	unset($_SESSION['carrinho'][$key]);
-	}
 
 	if (empty($_SESSION['produto'])) {
 		unset($_SESSION['produto']); 

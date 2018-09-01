@@ -3,7 +3,6 @@
         use PHPMailer\PHPMailer\Exception;
 	  require_once("../conexao/conexao.php");
     require_once("../vendor/autoload.php");
-    header('Location: ../view/historico.php');
     $mail = new PHPMailer(true);
     $mail->SMTPOptions = array(
     'ssl' => array(
@@ -49,7 +48,7 @@
  	$comando->execute();
 
  	$id_compra = $conexao->lastInsertId();
-	
+	header('Location: ../view/recibo.php?compra='.$id_compra);
 	  $comando = $conexao->prepare("SELECT nome, email, descricao FROM usuario WHERE id = ?");
     $comando->bindparam(1, $id);
     $comando->execute();
